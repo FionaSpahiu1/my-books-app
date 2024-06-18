@@ -1,73 +1,66 @@
 import React, { useState, useEffect } from 'react';
-import Papa from 'papaparse';
 import Modal from './Modal';
-
+import "./App.css";
 function App() {
   const [books, setBooks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [newBook, setNewBook] = useState({ Title: '', Author: '', Year: '', Rating: '' });
+  const [newBook, setNewBook] = useState({ Genre: '', Title: '', Author: '', Year: '',Annotation: '', Rating: '' });
 
-  // Function to handle input change in modal form
+  // Fetch books from the server on component mount
+  useEffect(() => {
+    fetch('http://localhost:5000/books')
+      .then(response => response.json())
+      .then(data => setBooks(data))
+      .catch(error => console.error('Error fetching books:', error));
+  }, []);
+
+  // Handle input change
   const handleInputChange = (e) => {
     setNewBook({ ...newBook, [e.target.name]: e.target.value });
   };
 
-  // Function to submit new book details
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    setBooks([...books, newBook]);
-    setNewBook({ Title: '', Author: '', Year: '', Rating: '' });
-    setModalOpen(false);
+    fetch('http://localhost:5000/books', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newBook),
+    })
+    .then(response => {
+      if (response.ok) {
+        setBooks([...books, newBook]);  // Update UI optimistically
+        setNewBook({ Genre: '', Title: '', Author: '', Year: '',Annotation: '', Rating: '' });
+        setModalOpen(false);
+      }
+    })
+    .catch(error => console.error('Error adding book:', error));
   };
-
-  // Load books from CSV on component mount
-  useEffect(() => {
-    fetch('/books.csv')
-      .then(response => response.text())
-      .then(csvData => {
-        Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            setBooks(results.data);
-          }
-        });
-      });
-  }, []);
-
+  const renderRating = (rating) => {
+    let stars = [];
+    for (let i = 0; i < parseInt(rating); i++) {
+      stars.push(<span key={i}>&#9733;</span>); // Star character
+    }
+    return stars;
+  };
   return (
     <div className="App">
       <h1>My Book List</h1>
       <button onClick={() => setModalOpen(true)}>Add New Book</button>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <form onSubmit={handleSubmit}>
-          <label>Title: <input type="text" name="Title" value={newBook.Title} onChange={handleInputChange} required /></label>
-          <label>Author: <input type="text" name="Author" value={newBook.Author} onChange={handleInputChange} required /></label>
-          <label>Year: <input type="text" name="Year" value={newBook.Year} onChange={handleInputChange} required /></label>
-          <label>Rating: <input type="text" name="Rating" value={newBook.Rating} onChange={handleInputChange} required /></label>
-          <button type="submit">Add Book</button>
-        </form>
-      </Modal>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year</th>
-            <th>Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map((book, index) => (
-            <tr key={index}>
-              <td>{book.Title}</td>
-              <td>{book.Author}</td>
-              <td>{book.Year}</td>
-              <td>{book.Rating}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} handleSubmit={handleSubmit} handleInputChange={handleInputChange} newBook={newBook} />
+      <div className="book-list">
+        {books.map((book, index) => (
+          <div key={index} className="book-section">
+            <h2>{book.Title} <span className="rating">{renderRating(book.Rating)}</span> </h2>
+            <p>Genre: {book.Genre}</p>
+            <p>Author: {book.Author}</p>
+            <p>Year: {book.Year}</p>
+            <p>Annotation: {book.Annotation}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
