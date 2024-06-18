@@ -47,12 +47,13 @@ function App() {
   };
   return (
     <div className="App">
-      <h1>My Book List</h1>
+      <h1>A Book of One's Own</h1>
       <button onClick={() => setModalOpen(true)}>Add New Book</button>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} handleSubmit={handleSubmit} handleInputChange={handleInputChange} newBook={newBook} />
       <div className="book-list">
         {books.map((book, index) => (
           <div key={index} className="book-card">
+      
             <div className='book-image'>
               <img src={book.ImageUrl} alt={`Cover of ${book.Title}`} />
             </div>
@@ -61,7 +62,7 @@ function App() {
               <p><b>Genre:</b> {book.Genre}</p>
               <p><b>Author:</b> {book.Author}</p>
               <p><b>Year:</b> {book.Year}</p>
-              <p><b>Annotation:</b> {book.Annotation}</p>
+              <p><b>Annotation:</b> <br/>{book.Annotation}</p>
             </div>
           </div>
         ))}
