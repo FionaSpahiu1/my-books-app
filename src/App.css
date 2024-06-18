@@ -3,6 +3,7 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
 }
 
 /* Layout */
@@ -12,21 +13,6 @@ body, html {
   text-align: center;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #a74040;
-  text-align: left;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f2f2;
-}
 
 button {
   background-color: #4CAF50;
@@ -67,6 +53,64 @@ button:hover {
 .modal-header {
   border-bottom: 2px solid #f2f2f2;
   padding-bottom: 10px;
+}
+
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px;
+  text-align: left;
+
+}
+
+.book-card {
+  display: flex;
+  background-color: #e2bff3;
+  border: 1px solid #e91212;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(15, 29, 183, 0.1);
+  width: 100%;
+}
+
+
+.book-image img {
+  width: 250px;
+  height: 350px;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: flex-start;
+  
+}
+
+.book-details p {
+  margin: 4px 0;
+  line-height: 1;
+}
+
+.book-details h2 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.rating {
+  color: goldenrod;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+.rating span {
+  line-height: 1;
 }
 
 .modal-body {

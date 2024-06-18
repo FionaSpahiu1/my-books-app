@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [books, setBooks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [newBook, setNewBook] = useState({ Genre: '', Title: '', Author: '', Year: '',Annotation: '', Rating: '' });
+  const [newBook, setNewBook] = useState({ ImageUrl:'', Genre: '', Title: '', Author: '', Year: '', Annotation: '', Rating: '' });
 
   // Fetch books from the server on component mount
   useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
     .then(response => {
       if (response.ok) {
         setBooks([...books, newBook]);  // Update UI optimistically
-        setNewBook({ Genre: '', Title: '', Author: '', Year: '',Annotation: '', Rating: '' });
+        setNewBook({ ImageUrl: '', Genre: '', Title: '', Author: '', Year: '',Annotation: '', Rating: '' });
         setModalOpen(false);
       }
     })
@@ -52,12 +52,17 @@ function App() {
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} handleSubmit={handleSubmit} handleInputChange={handleInputChange} newBook={newBook} />
       <div className="book-list">
         {books.map((book, index) => (
-          <div key={index} className="book-section">
-            <h2>{book.Title} <span className="rating">{renderRating(book.Rating)}</span> </h2>
-            <p>Genre: {book.Genre}</p>
-            <p>Author: {book.Author}</p>
-            <p>Year: {book.Year}</p>
-            <p>Annotation: {book.Annotation}</p>
+          <div key={index} className="book-card">
+            <div className='book-image'>
+              <img src={book.ImageUrl} alt={`Cover of ${book.Title}`} />
+            </div>
+            <div className='book-details'>
+              <h2>{book.Title} <span className="rating">{renderRating(book.Rating)}</span> </h2>
+              <p><b>Genre:</b> {book.Genre}</p>
+              <p><b>Author:</b> {book.Author}</p>
+              <p><b>Year:</b> {book.Year}</p>
+              <p><b>Annotation:</b> {book.Annotation}</p>
+            </div>
           </div>
         ))}
       </div>
