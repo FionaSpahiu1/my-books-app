@@ -47,8 +47,11 @@ function App() {
   };
   return (
     <div className="App">
-      <h1>A Book of One's Own</h1>
-      <button onClick={() => setModalOpen(true)}>Add New Book</button>
+      <h1>A World of One's Own</h1>
+      <p>
+      Some of these books have profoundly impacted me and my way of thinking, and I consider them a part of who I am. I hope this list offers a glimpse into who I am and that these books can provide as much insight and comfort to others as they have given me.
+      </p>
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} handleSubmit={handleSubmit} handleInputChange={handleInputChange} newBook={newBook} />
       <div className="book-list">
         {books.map((book, index) => (
